@@ -1,0 +1,23 @@
+html
+  head 
+    title= 'chatle'
+    script(src='/socket.io/socket.io.js')
+  body
+
+  h1
+    a(href='/') chatle.net
+
+  form(method='post' action='/create_room')
+    input(type='text' name='room_name')
+    input(type='submit' value='Create room & Entering the room')
+  
+  h3 Information
+  li Release Beta from Aug.16.2019
+
+  h2 Chat Rooms ( #{total_member} peoples is chating )
+
+  div#room_overview
+    each room, index in Room
+      li 
+        a(href='/room/' + index) #{room.name}
+        t (#{room.member} peoples)

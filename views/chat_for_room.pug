@@ -1,0 +1,60 @@
+html
+  head 
+    title= 'chatle'
+    script(src='/socket.io/socket.io.js')
+  body
+
+    script. 
+      var socket = io('/', {
+        reconnection: false
+      });  
+
+      const room_id = '#{room_id}';
+
+      var Message = {
+        name: '',
+        message: '',
+        room_id: room_id,
+      }
+
+
+      // WARNING:'data' of var is some message in this program 
+      function $id(id) { return document.getElementById(id); }
+
+      socket.emit('join_room', Message);
+      socket.on('message', function (data) {
+        display_message(data);
+      });
+
+      function send_message() {
+        Message.name = $id('type_text_name').value;
+        Message.message = $id('type_text_message').value;
+        socket.emit('message', Message);
+        $id('type_text_message').value = '';
+      }
+      function display_message(data) {
+        var elm_li = document.createElement('li');
+        var text_node = document.createTextNode(data.message);
+        elm_li.appendChild(text_node);
+        $id('message_overview').prepend(elm_li);
+        console.log('this is function of display_message')
+        console.log(data);
+      }
+
+
+  h1
+    a(href='/') chatle.net
+
+  h2= room_name
+
+  form(onsubmit='send_message(); return false')
+    input(type='text' id='type_text_name')
+    input(type='text' id='type_text_message')
+    input(
+      type='submit'
+      value='send'
+    )
+
+
+
+  div#message_overview
